@@ -1,1 +1,1 @@
-web: gunicorn BeatableAPI.wsgi
+web: gunicorn BeatableAPI.wsgi --log-file -
