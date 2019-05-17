@@ -6,7 +6,7 @@ import json
 from . import ImageProcessing
 
 def index(request):
-    return HttpResponse("<h1 style=\"font-family: 'Lucida Console'; display: flex; height: 100vh; align-items: center; justify-content: center;\">You're very Beatable ;)</h1>")
+    return HttpResponse("<h1 style=\"font-family: 'Lucida Console'; margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center;\">You're very Beatable ;)</h1>")
 
 
 ## TEMPLATE TO EXPOSE METHODS FOR REST API
