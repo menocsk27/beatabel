@@ -1,1 +1,1 @@
-web: gunicorn BeatableAPI.wsgi --preload
+web: gunicorn BeatabelAPI.wsgi
