@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BeatableAPI.iml" filepath="$PROJECT_DIR$/.idea/BeatableAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BeatabelAPI.iml" filepath="$PROJECT_DIR$/.idea/BeatabelAPI.iml" />
     </modules>
   </component>
 </project>
