@@ -6,12 +6,13 @@ import json
 from . import ImageProcessing
 
 def index(request):
-    return HttpResponse(
-        "<body style=\"margin: 0\">"
-            "<h1 style=\"font-family: 'Lucida Console', 'Consolas'; margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center;\">"
-                "You're very Beatable ;)"
-            "</h1>"
-    )
+    # return HttpResponse(
+    #     "<body style=\"margin: 0\">"
+    #         "<h1 style=\"font-family: 'Lucida Console', 'Consolas'; margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center;\">"
+    #             "You're very Beatable ;)"
+    #         "</h1>"
+    # )
+    return render(request, "index.html")
 
 
 ## TEMPLATE TO EXPOSE METHODS FOR REST API
