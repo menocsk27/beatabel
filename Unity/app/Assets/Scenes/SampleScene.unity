@@ -327,12 +327,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprint: {fileID: 1369634743}
-  patchDistance: 10
+  patchDistance: 15
   imageLoader: {fileID: 78490270}
   cropWidth: 100
   cropHeight: 100
-  patchDistance: 20
-  patchCount: 100
 --- !u!82 &202547843
 AudioSource:
   m_ObjectHideFlags: 0
@@ -757,7 +755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageLoader: {fileID: 78490270}
-  speed: 11.2
 --- !u!1 &1399419299
 GameObject:
   m_ObjectHideFlags: 0
