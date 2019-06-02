@@ -19,7 +19,6 @@ public class ClassificationInteraction : MonoBehaviour
         Vector2 centerToCls = centerPosition - classPosition;
         Vector2 positionToCls = classPosition - position;
         float angle = Vector2.SignedAngle(centerToCls, positionToCls);
-        Debug.Log(angle);
         
         float classScale = (Math.Abs(angle) < 10) ? Vector2.Distance(centerPosition, position) : 1;
         cls.transform.localScale = new Vector3(classScale, classScale, cls.transform.localScale.z);
