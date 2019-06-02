@@ -11,21 +11,24 @@ public class ClassificationInteraction : MonoBehaviour
 
     private float distance;
     private bool dragging = false;
+    private Vector2 centerPosition = new Vector2(0, 0);
 
-    void UpdateClassScales(Vector3 position)
+    void UpdateClassScale(GameObject cls, Vector2 position)
     {
-        if (class1)
-        {
-            float class1Scale = 5 / (Vector2.Distance(position, class1.transform.position) + 0.1F);
-            if (class1Scale < 1) class1Scale = 1;
-            class1.transform.localScale = new Vector3(class1Scale, class1Scale, 1);
-        }
-        if (class2)
-        {
-            float class2Scale = 5 / (Vector2.Distance(position, class2.transform.position) + 0.1F);
-            if (class2Scale < 1) class2Scale = 1;
-            class2.transform.localScale = new Vector3(class2Scale, class2Scale, 1);
-        }
+        Vector2 classPosition = new Vector2(cls.transform.position.x, cls.transform.position.y);
+        Vector2 centerToCls = centerPosition - classPosition;
+        Vector2 positionToCls = classPosition - position;
+        float angle = Vector2.SignedAngle(centerToCls, positionToCls);
+        Debug.Log(angle);
+        
+        float classScale = (Math.Abs(angle) < 10) ? Vector2.Distance(centerPosition, position) : 1;
+        cls.transform.localScale = new Vector3(classScale, classScale, cls.transform.localScale.z);
+    }
+
+    void UpdateClassScales(Vector2 position)
+    {
+        if (class1) UpdateClassScale(class1, position);
+        if (class2) UpdateClassScale(class2, position);
     }
 
     void ResetClassScales()
@@ -36,10 +39,13 @@ public class ClassificationInteraction : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (gameObject.transform.position.z <= 0.0)
+        if (gameObject.transform.position.z <= 1.0)
         {
             distance = Vector3.Distance(transform.position, Camera.main.transform.position);
             dragging = true;
+
+            Vector3 position = gameObject.transform.position;
+            centerPosition = new Vector2(position.x, position.y);
         }
     }
 
@@ -81,7 +87,7 @@ public class ClassificationInteraction : MonoBehaviour
 
             transform.position = position;
 
-            UpdateClassScales(position);
+            UpdateClassScales(new Vector2(position.x, position.y));
         }
     }
 }
