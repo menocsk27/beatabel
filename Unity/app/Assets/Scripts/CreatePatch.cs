@@ -29,9 +29,6 @@ public class CreatePatch : MonoBehaviour
     {
         Vector2 imgDim = imageLoader.GetDimensions();
 
-        Debug.Log(imgDim.x);
-        Debug.Log(imgDim.y);
-
         int xCount = Mathf.FloorToInt(imgDim.x / cropWidth);
         int yCount = Mathf.FloorToInt(imgDim.y / cropHeight);
 

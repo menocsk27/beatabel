@@ -36,6 +36,21 @@ public class ClassificationInteraction : MonoBehaviour
         if (class2) class2.transform.localScale = new Vector3(1, 1, 1);
     }
 
+    void SaveInteraction(string input)
+    {
+        CropImageLoader cropImageLoader = gameObject.GetComponent<CropImageLoader>();
+        Vector2Int cropCoordinates = cropImageLoader.GetCropCoordinates();
+        Vector2Int cropDimensions = cropImageLoader.GetCropDimensions();
+        string imgPath = cropImageLoader.GetImagePath();
+        string inputClass = "city";
+        classificationStorage.SaveInteraction(imgPath, inputClass, input, cropCoordinates.x, cropCoordinates.y, cropDimensions.x, cropDimensions.y);
+
+        ResetClassScales();
+
+        // Destroy object
+        Destroy(gameObject);
+    }
+
     void OnMouseDown()
     {
         if (gameObject.transform.position.z <= 1.0)
@@ -59,13 +74,8 @@ public class ClassificationInteraction : MonoBehaviour
             gameController.AddScore(1);
 
             // Add to stored interactions
-            float input = (gameObject.transform.position.x > 0) ? 1 : 0;
-            classificationStorage.SaveInteraction(input);
-
-            ResetClassScales();
-
-            // Destroy object
-            Destroy(gameObject);
+            string input = (gameObject.transform.position.x > 0) ? "1" : "0";
+            SaveInteraction(input);
         }
     }
 
@@ -87,6 +97,10 @@ public class ClassificationInteraction : MonoBehaviour
             transform.position = position;
 
             UpdateClassScales(new Vector2(position.x, position.y));
+        } else if (gameObject.transform.position.z < -5.0)
+        {
+            // The user did not interact
+            SaveInteraction("NULL");
         }
     }
 }

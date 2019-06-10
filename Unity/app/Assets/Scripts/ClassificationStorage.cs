@@ -6,7 +6,7 @@ public class ClassificationStorage : MonoBehaviour
 {
     private string filePath= "data/users.csv";
 
-    public void SaveInteraction(float input)
+    public void SaveInteraction(string imgPath, string inputClass, string input, int xPos, int yPos, int cropWidth, int cropHeight)
     {
         // Create directory if it does not exist
         FileInfo fileInfo = new FileInfo(filePath);
@@ -18,13 +18,7 @@ public class ClassificationStorage : MonoBehaviour
 
         // Append line to file
         StreamWriter writer = new StreamWriter(filePath, true);
-        string imageId = "imageId";
-        int xPos = 0;
-        int yPos = 0;
-        int width = 512;
-        int height = 512;
-        string cls = "city";
-        string classification = imageId + "," + xPos + "," + yPos + "," + width + "," + height + "," + cls + "," + input;
+        string classification = imgPath + "," + xPos + "," + yPos + "," + cropWidth + "," + cropHeight + "," + inputClass + ',' + input;
         writer.WriteLine(classification);
         writer.Close();
     }

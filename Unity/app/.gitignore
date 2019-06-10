@@ -63,3 +63,6 @@ crashlytics-build.properties
 
 # Data folder
 /data
+
+Thumbs.db
+Thumbs.db.meta

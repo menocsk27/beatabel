@@ -42,6 +42,21 @@ public class CropImageLoader : MonoBehaviour
         this.cropHeight = cropHeight;
     }
 
+    public Vector2Int GetCropCoordinates()
+    {
+        return new Vector2Int(xCropPos, yCropPos);
+    }
+
+    public Vector2Int GetCropDimensions()
+    {
+        return new Vector2Int(cropWidth, cropHeight);
+    }
+
+    public string GetImagePath()
+    {
+        // get the original image path
+        return imageLoader.GetImagePath();
+    }
 
     private void OnApplicationQuit()
     {
