@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 202547841}
   - component: {fileID: 202547840}
   - component: {fileID: 202547839}
+  - component: {fileID: 202547845}
   - component: {fileID: 202547842}
   - component: {fileID: 202547844}
   - component: {fileID: 202547843}
@@ -259,6 +260,7 @@ MonoBehaviour:
   imageLoader: {fileID: 202547844}
   cropWidth: 100
   cropHeight: 100
+  beatAccuracy: 2
 --- !u!82 &202547843
 AudioSource:
   m_ObjectHideFlags: 0
@@ -367,6 +369,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63227fd1c8957224c8c516d63d208a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &202547845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202547838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f0b29e14da3fc419629e9b329b5c22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 202547843}
+  bufferSize: 1024
+  gThresh: 0.9
+  onBeat:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: AudioProcessor+OnBeatEventHandler, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onSpectrum:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: AudioProcessor+OnSpectrumEventHandler, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
