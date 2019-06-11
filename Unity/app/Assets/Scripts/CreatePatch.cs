@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CreatePatch : MonoBehaviour
 {
@@ -8,6 +9,14 @@ public class CreatePatch : MonoBehaviour
     public ImageLoader imageLoader;
     public int cropWidth = 100;
     public int cropHeight = 100;
+
+    // Number of beats to use for determining the beats per minute
+    public int beatAccuracy = 2;
+
+    private AudioProcessor audioProcessor;
+    private Queue beats = new Queue();
+    private float bpm; // beats per minute
+    private System.Diagnostics.Stopwatch beatStopwatch = new System.Diagnostics.Stopwatch();
 
     private void CreateImagePatch(float zPosition, int cropX, int cropY)
     {
@@ -44,8 +53,32 @@ public class CreatePatch : MonoBehaviour
         }
     }
 
+    private void OnBeat()
+    {
+        // Start tracking the beats
+        if (beats.Count == 0)
+        {
+            beatStopwatch.Start();
+        }
+
+        // Track beat
+        beats.Enqueue(beatStopwatch.Elapsed);
+
+        // Evaluate beats
+        if (beats.Count >= beatAccuracy)
+        {
+            beatStopwatch.Stop();
+            audioProcessor.onBeat.RemoveListener(OnBeat);
+            Debug.Log(beats);
+
+            // TODO: Process beats and start game
+            CreateImagePatches();
+        }
+    }
+
     void Start()
     {
-        CreateImagePatches();
+        audioProcessor = FindObjectOfType<AudioProcessor>();
+        audioProcessor.onBeat.AddListener(OnBeat);
     }
 }
