@@ -6,13 +6,24 @@ public class ClassificationInteraction : MonoBehaviour
 {
     public ClassificationStorage classificationStorage;
     public GameController gameController;
+    public GameObject interactiveArea;
+
+    // TODO: Remove?
     public GameObject class1;
+
+    // TODO: Remove?
     public GameObject class2;
 
-    private float distance;
+    private bool allowDragging = false;
     private bool dragging = false;
+
+    // TODO: Remove?
+    private float distance;
+
+    // TODO: Remove?
     private Vector2 centerPosition = new Vector2(0, 0);
 
+    // TODO: Remove?
     void UpdateClassScale(GameObject cls, Vector2 position)
     {
         Vector2 classPosition = new Vector2(cls.transform.position.x, cls.transform.position.y);
@@ -24,12 +35,14 @@ public class ClassificationInteraction : MonoBehaviour
         cls.transform.localScale = new Vector3(classScale, classScale, cls.transform.localScale.z);
     }
 
+    // TODO: Remove?
     void UpdateClassScales(Vector2 position)
     {
         if (class1) UpdateClassScale(class1, position);
         if (class2) UpdateClassScale(class2, position);
     }
 
+    // TODO: Remove?
     void ResetClassScales()
     {
         if (class1) class1.transform.localScale = new Vector3(1, 1, 1);
@@ -53,9 +66,8 @@ public class ClassificationInteraction : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (gameObject.transform.position.z <= 1.0)
+        if (allowDragging)
         {
-            distance = Vector3.Distance(transform.position, Camera.main.transform.position);
             dragging = true;
 
             Vector3 position = gameObject.transform.position;
@@ -84,6 +96,22 @@ public class ClassificationInteraction : MonoBehaviour
         ResetClassScales();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == interactiveArea)
+        {
+            allowDragging = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == interactiveArea)
+        {
+            SaveInteraction("NULL");
+        }
+    }
+
     void Update()
     {
         if (dragging)
@@ -97,10 +125,6 @@ public class ClassificationInteraction : MonoBehaviour
             transform.position = position;
 
             UpdateClassScales(new Vector2(position.x, position.y));
-        } else if (gameObject.transform.position.z < -5.0)
-        {
-            // The user did not interact
-            SaveInteraction("NULL");
         }
     }
 }
