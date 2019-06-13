@@ -4,29 +4,36 @@ using UnityEngine;
 
 public class CollisionInteraction : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public ClassificationStorage classificationStorage;
+
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        classificationStorage = GameObject.Find("GameController").GetComponent<ClassificationStorage>();
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.name == "image")
-        //Debug.Log("Image collided!");
+        Debug.Log("Image collided!");
     }
 
-    // Destroy everything that enters the trigger
     void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("On trigger enter!");
+        Debug.Log("On trigger enter!");
+        SaveInteraction(other.gameObject);
+    }
 
-        //Debug.Log(other.gameObject);
+    void SaveInteraction(GameObject go)
+    {
+        CropImageLoader cropImageLoader = go.GetComponent<CropImageLoader>();
+        Vector2Int cropCoordinates = cropImageLoader.GetCropCoordinates();
+        Vector2Int cropDimensions = cropImageLoader.GetCropDimensions();
+        string imgPath = cropImageLoader.GetImagePath();
+
+        string inputClass = this.gameObject.name; // the class from the collider
+        string input = "1"; // == TRUE -> actually not needed (TODO)
+        classificationStorage.SaveInteraction(imgPath, inputClass, input, cropCoordinates.x, cropCoordinates.y, cropDimensions.x, cropDimensions.y);
+
+        // Destroy crop object
+        Destroy(go);
     }
 }

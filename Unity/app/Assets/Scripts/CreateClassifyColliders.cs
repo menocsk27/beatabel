@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class CreateClassifyColliders : MonoBehaviour
 {
@@ -13,12 +14,10 @@ public class CreateClassifyColliders : MonoBehaviour
     {
         classes.Add("class1");
         classes.Add("class2");
-        classes.Add("class3");
-        classes.Add("class4");
-
+        //classes.Add("class3");
+        //classes.Add("class4");
 
         int angleBetween = Mathf.FloorToInt(360 / classes.Count);
-
         CreateColliders(angleBetween);
     }
 
@@ -30,8 +29,6 @@ public class CreateClassifyColliders : MonoBehaviour
 
         float angle = 0 * Mathf.PI;
 
-       
-
         for (int i = 0; i < classes.Count; i++)
         {
 
@@ -41,11 +38,6 @@ public class CreateClassifyColliders : MonoBehaviour
                    classBlueprint.transform.position.z
                );
 
-
-            Debug.Log(classes[i]);
-            Debug.Log("angle (rad): " + angle);
-            Debug.Log("new loc: " + newLocation + "\n");
-
             var myClass = Instantiate(
                 classBlueprint,
                 newLocation,
@@ -53,6 +45,9 @@ public class CreateClassifyColliders : MonoBehaviour
             );
 
             myClass.transform.parent = this.gameObject.transform;
+            myClass.name = classes[i];
+            myClass.GetChild(0).GetComponent<TextMeshPro>().text = myClass.name;
+
 
             angle = angle + Mathf.Deg2Rad * angleBetween;
         }
@@ -60,7 +55,6 @@ public class CreateClassifyColliders : MonoBehaviour
 
     private void Update()
     {
-        this.gameObject.transform.Rotate(0f, 0f, 1f);
     }
 
 }
