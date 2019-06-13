@@ -1,22 +1,23 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CreatePatch : MonoBehaviour
 {
     public Transform blueprint;
+    public Transform interactiveArea;
     public float patchDistance = 10;
 
     public ImageLoader imageLoader;
     public int cropWidth = 100;
     public int cropHeight = 100;
 
-    // Number of beats to use for determining the beats per minute
-    public int beatAccuracy = 2;
+    // Number of intervals between beats to use for determining the beats per minute
+    public int beatAccuracy = 3;
 
     private AudioProcessor audioProcessor;
-    private Queue beats = new Queue();
-    private float bpm; // beats per minute
-    private System.Diagnostics.Stopwatch beatStopwatch = new System.Diagnostics.Stopwatch();
+    private Stack<long> beats;
+    private float beatInterval; // milliseconds between beats
+    private float patchSpeed;
 
     private void CreateImagePatch(float zPosition, int cropX, int cropY)
     {
@@ -29,13 +30,24 @@ public class CreatePatch : MonoBehaviour
              ),
             blueprint.transform.rotation
         );
-        
-        clone.GetComponent<CropImageLoader>().SetCropCoordinates(cropX * cropWidth, cropY * cropHeight);
-        clone.GetComponent<CropImageLoader>().SetCropDimensions(cropWidth, cropHeight);
+
+        CropImageLoader cropImageLoader = clone.GetComponent<CropImageLoader>();
+        cropImageLoader.SetCropCoordinates(cropX * cropWidth, cropY * cropHeight);
+        cropImageLoader.SetCropDimensions(cropWidth, cropHeight);
+
+        RunnerMovement runnerMovement = clone.GetComponent<RunnerMovement>();
+        runnerMovement.StartMovement();
+        runnerMovement.speed = patchSpeed;
     }
 
     private void CreateImagePatches()
     {
+        float distance = Vector2.Distance(blueprint.position, interactiveArea.position);
+        patchSpeed = distance / (2 * beatInterval / 1000);
+        float zDelta = patchSpeed * (2 * beatInterval / 1000);
+        Debug.Log(patchSpeed);
+        Debug.Log(zDelta);
+
         Vector2 imgDim = imageLoader.GetDimensions();
 
         int xCount = Mathf.FloorToInt(imgDim.x / cropWidth);
@@ -46,7 +58,7 @@ public class CreatePatch : MonoBehaviour
         {
             for (int y = 0; y < yCount; y++)
             {
-                float zPosition = blueprint.transform.position.z + i * patchDistance;
+                float zPosition = blueprint.transform.position.z + i * zDelta;
                 CreateImagePatch(zPosition, x, y);
                 i++;
             }
@@ -55,29 +67,33 @@ public class CreatePatch : MonoBehaviour
 
     private void OnBeat()
     {
-        // Start tracking the beats
-        if (beats.Count == 0)
+        if (beats.Count < beatAccuracy + 1)
         {
-            beatStopwatch.Start();
-        }
-
-        // Track beat
-        beats.Enqueue(beatStopwatch.Elapsed);
-
-        // Evaluate beats
-        if (beats.Count >= beatAccuracy)
+            // Track beat
+            long milliseconds = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
+            beats.Push(milliseconds);
+        } else
         {
-            beatStopwatch.Stop();
             audioProcessor.onBeat.RemoveListener(OnBeat);
-            Debug.Log(beats);
 
-            // TODO: Process beats and start game
+            // Average over all beat intervals
+            beatInterval = 0;
+            while (beats.Count > 1)
+            {
+                long first = beats.Pop();
+                long second = beats.Peek();
+                beatInterval += first - second;
+            }
+            beatInterval /= beatAccuracy + 1;
+            
+            // Start game
             CreateImagePatches();
         }
     }
 
     void Start()
     {
+        beats = new Stack<long>();
         audioProcessor = FindObjectOfType<AudioProcessor>();
         audioProcessor.onBeat.AddListener(OnBeat);
     }

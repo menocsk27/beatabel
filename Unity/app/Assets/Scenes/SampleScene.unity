@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprint: {fileID: 1369634743}
+  interactiveArea: {fileID: 1400944091}
   patchDistance: 20
   imageLoader: {fileID: 202547844}
   cropWidth: 100
@@ -690,6 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77b85aa18a33ce4784719761b51e8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autostart: 0
   speed: 11.2
 --- !u!114 &1369634746
 MonoBehaviour:
