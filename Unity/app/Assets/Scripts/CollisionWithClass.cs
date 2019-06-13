@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionInteraction : MonoBehaviour
+public class CollisionWithClass : MonoBehaviour
 {
     public ClassificationStorage classificationStorage;
 
@@ -13,17 +13,21 @@ public class CollisionInteraction : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Image collided!");
+        // Debug.Log("Image collided!");
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("On trigger enter!");
-        SaveInteraction(other.gameObject);
+        if (other.gameObject.tag.StartsWith("Patch"))
+        {
+            SaveInteraction(other.gameObject);
+        }
+       
     }
 
     void SaveInteraction(GameObject go)
     {
+        Debug.Log(go.name);
         CropImageLoader cropImageLoader = go.GetComponent<CropImageLoader>();
         Vector2Int cropCoordinates = cropImageLoader.GetCropCoordinates();
         Vector2Int cropDimensions = cropImageLoader.GetCropDimensions();

@@ -1,28 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(BoxCollider))]
+public class Draggable : MonoBehaviour {
 
-public class Draggable : MonoBehaviour
-{
+    private bool draggable;
 
-    private Vector3 screenPoint;
-    private Vector3 offset;
-
-    void OnMouseDown()
+    private void Start()
     {
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        draggable = false;
+    }
 
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-
+    public void SetDraggable()
+    {
+        this.draggable = true;
     }
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        transform.position = curPosition;
-
+        if (draggable)
+        {
+            float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+            Vector3 pos_move = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
+            transform.position = new Vector3(pos_move.x, pos_move.y, transform.position.z);
+        }
     }
 }
