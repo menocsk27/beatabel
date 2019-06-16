@@ -5,14 +5,14 @@ public class CreatePatch : MonoBehaviour
 {
     public Transform blueprint;
     public Transform interactiveArea;
-    public float patchDistance = 10;
+    public int beatsBetweenPatches = 2;
 
     public ImageLoader imageLoader;
     public int cropWidth = 100;
     public int cropHeight = 100;
 
     // Number of intervals between beats to use for determining the beats per minute
-    public int beatAccuracy = 3;
+    public int beatAccuracy = 2;
 
     private AudioProcessor audioProcessor;
     private Stack<long> beats;
@@ -36,17 +36,15 @@ public class CreatePatch : MonoBehaviour
         cropImageLoader.SetCropDimensions(cropWidth, cropHeight);
 
         RunnerMovement runnerMovement = clone.GetComponent<RunnerMovement>();
-        runnerMovement.StartMovement();
         runnerMovement.speed = patchSpeed;
+        runnerMovement.StartMovement();
     }
 
     private void CreateImagePatches()
     {
-        float distance = Vector2.Distance(blueprint.position, interactiveArea.position);
-        patchSpeed = distance / (2 * beatInterval / 1000);
-        float zDelta = patchSpeed * (2 * beatInterval / 1000);
-        Debug.Log(patchSpeed);
-        Debug.Log(zDelta);
+        float distance = 10.0F * Vector2.Distance(blueprint.transform.position, interactiveArea.transform.position);
+        patchSpeed = distance / (4.0F * beatInterval / 1000.0F); // the patch speed in units/second
+        float zDelta = beatsBetweenPatches * patchSpeed; // 2 beats between patches
 
         Vector2 imgDim = imageLoader.GetDimensions();
 
@@ -63,6 +61,11 @@ public class CreatePatch : MonoBehaviour
                 i++;
             }
         }
+
+        // Start movement
+        RunnerMovement runnerMovement = blueprint.GetComponent<RunnerMovement>();
+        runnerMovement.speed = patchSpeed;
+        runnerMovement.StartMovement();
     }
 
     private void OnBeat()
@@ -84,7 +87,9 @@ public class CreatePatch : MonoBehaviour
                 long second = beats.Peek();
                 beatInterval += first - second;
             }
-            beatInterval /= beatAccuracy + 1;
+            beatInterval /= (beatAccuracy + 1.0F);
+
+            Debug.Log(beatInterval);
             
             // Start game
             CreateImagePatches();
