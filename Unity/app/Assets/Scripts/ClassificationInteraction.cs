@@ -1,16 +1,15 @@
-﻿using System;
-using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ClassificationInteraction : MonoBehaviour
 {
     public ClassificationStorage classificationStorage;
-    public GameController gameController;
+    public Score score;
     public GameObject interactiveArea;
     public Draggable draggable;
 
     private void Start()
     {
+        score = FindObjectOfType<Score>();
         draggable = gameObject.GetComponent<Draggable>();
     }
     private void OnTriggerEnter(Collider other)
@@ -31,7 +30,9 @@ public class ClassificationInteraction : MonoBehaviour
             Destroy(gameObject);
 
             // Update score
-            gameController.AddScore(1);
+            // TODO: Score: Determine accuracy according to the interaction timing
+            float accuracy = Random.Range(-1.0F, 1.0F);
+            score.AddScore(accuracy);
         }
     }
 
