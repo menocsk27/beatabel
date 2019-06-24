@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@4(1ij3ynw36%-bq)$foztv0118y^nq+r)arf#h93rk8a+%l#l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "beatabelapi.herokuapp.com"]
 
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
 
     'main_app',
     'rest_framework',
-    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -79,12 +78,32 @@ WSGI_APPLICATION = 'BeatabelAPI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+
+
+db_from_env = dj_database_url.config()
+
+# DATABASES['default'] = dj_database_url.config()
 
 # LOGGING = {
 #     'version': 1,
@@ -154,8 +173,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'main_app/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+SONGS_PATH = os.path.join(BASE_DIR, 'songs')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "songs/")
+]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+SONGS_URL = "/songs/"
+
 STATIC_URL = '/static/'
+
+

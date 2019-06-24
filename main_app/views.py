@@ -1,17 +1,16 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import File
 from django.http import JsonResponse
+from .models import Song
 import json
+import os
 
-from . import ImageProcessing
+from . import ProcessImage
+from .ProcessSong import get_song_metadata, get_song_metadata_file
 
 def index(request):
-    # return HttpResponse(
-    #     "<body style=\"margin: 0\">"
-    #         "<h1 style=\"font-family: 'Lucida Console', 'Consolas'; margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center;\">"
-    #             "You're very Beatable ;)"
-    #         "</h1>"
-    # )
     return render(request, "index.html")
 
 
@@ -20,6 +19,23 @@ def index(request):
 ## def methodName(request):
 ##     pass
 
+@csrf_exempt
+def createTimestamps(request):
+    songsFolderPath = "songs/"
+    # songList =
+    if request.method == "GET":
+        songs = Song.objects.all()
+        data = {"songs": songs}
+        return render(request, "timeStampMaker.html", data)
+    elif request.method == "POST":
+        if request.POST["songUpload"] == "true":
+            files = request.FILES.getlist("userSongs")
+            for file in files:
+                song = Song(name=file.name, path=file)
+                song.save()
+                # default_storage.save(songsFolderPath+file.name, file)
+                pass
+        return JsonResponse({"Success": True}, status=200)
 
 @csrf_exempt
 def colorToGray(request):
@@ -29,7 +45,7 @@ def colorToGray(request):
         img_b64 = json.loads(request.body)["image_b64"]
         if img_b64 != None or img_b64 != "":
             if(img_b64 != "" or img_b64 != None):
-                img = ImageProcessing.colorToGray(img_b64)
+                img = ProcessImage.colorToGray(img_b64)
                 if len(img) != None:
                     return HttpResponse(img)
                     # return JsonResponse({"result_image": img})
