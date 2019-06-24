@@ -4,5 +4,6 @@ from django.urls import path
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^colorToGray/$', views.colorToGray)
+    url(r'^colorToGray/$', views.colorToGray),
+    url(r'^createTimeStamps/$', views.createTimestamps),
 ]
