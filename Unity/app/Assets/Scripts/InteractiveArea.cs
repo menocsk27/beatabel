@@ -22,7 +22,7 @@ public class InteractiveArea : MonoBehaviour
     {
         if (other.gameObject.tag == patchTag)
         {
-            GetComponent<MeshRenderer>().material = inactiveMaterial;
+            ResetColor();
         }
     }
 
@@ -30,4 +30,10 @@ public class InteractiveArea : MonoBehaviour
     {
         inactiveMaterial = GetComponent<MeshRenderer>().material;
     }
+
+    public void ResetColor()
+    {
+        GetComponent<MeshRenderer>().material = inactiveMaterial;
+    }
+
 }

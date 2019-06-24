@@ -5,10 +5,22 @@ using UnityEngine;
 public class CollisionWithClass : MonoBehaviour
 {
     public ClassificationStorage classificationStorage;
+    public GameObject interactiveArea;
+
+    Color originalColor;
+    // value to fade down to
+    [Range(0f, 1f)]
+    public float fadeToAmount = 0f;
+    // fading speed
+    public float fadingSpeed = 0.05f;
 
     void Start()
     {
         classificationStorage = GameObject.Find("GameController").GetComponent<ClassificationStorage>();
+        originalColor = this.gameObject.GetComponent<Renderer>().material.color;
+
+        interactiveArea = GameObject.Find("InteractiveArea");
+        
     }
 
     void OnCollisionEnter(Collision collision)
@@ -21,8 +33,26 @@ public class CollisionWithClass : MonoBehaviour
         if (other.gameObject.tag.StartsWith("Patch"))
         {
             SaveInteraction(other.gameObject);
+            StartCoroutine("FadeToColor");
+
+            // set platform color
+            interactiveArea.GetComponent<InteractiveArea>().ResetColor();
         }
        
+    }
+
+    IEnumerator FadeToColor()
+    {
+        Renderer rend = this.gameObject.GetComponent<Renderer>();
+        rend.material.color = originalColor;
+
+        for (float i = 1f; i >= fadeToAmount; i -= 0.15f)
+        {
+            Color c = originalColor - new Color(i, i, i);
+            rend.material.color = c;
+
+            yield return new WaitForSeconds(fadingSpeed);
+        }
     }
 
     void SaveInteraction(GameObject go)

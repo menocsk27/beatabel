@@ -299,7 +299,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55885537529860178}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -333,6 +333,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classificationStorage: {fileID: 0}
+  fadeToAmount: 0
+  fadingSpeed: 0.05
 --- !u!222 &1481766129310211317
 CanvasRenderer:
   m_ObjectHideFlags: 0

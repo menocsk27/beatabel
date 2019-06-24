@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -491,7 +491,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 1, g: 0.19607846, b: 0.31389165, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -994,7 +994,8 @@ GameObject:
   - component: {fileID: 1369634746}
   - component: {fileID: 1369634744}
   - component: {fileID: 1369634747}
-  m_Layer: 0
+  - component: {fileID: 1369634748}
+  m_Layer: 9
   m_Name: Patch
   m_TagString: Patch
   m_Icon: {fileID: 0}
@@ -1009,7 +1010,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369634739}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 10, y: 1, z: 10}
@@ -1088,7 +1089,6 @@ MonoBehaviour:
   classificationStorage: {fileID: 202547839}
   score: {fileID: 0}
   interactiveArea: {fileID: 1400944087}
-  draggable: {fileID: 0}
 --- !u!114 &1369634745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,9 +1122,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369634739}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a25a746e174c954a94612be987486d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1369634748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369634739}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63733408ab8dde84398d08ff1a25594e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1399419299
@@ -1239,9 +1251,8 @@ GameObject:
   - component: {fileID: 1400944089}
   - component: {fileID: 1400944088}
   - component: {fileID: 1400944093}
-  - component: {fileID: 1400944094}
   - component: {fileID: 1400944092}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: InteractiveArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1350,18 +1361,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeMaterial: {fileID: 2100000, guid: 2b7e45521f160b5428ad993a26c8d542, type: 2}
   patchTag: Patch
---- !u!114 &1400944094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1400944087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a25a746e174c954a94612be987486d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1665163961
 GameObject:
   m_ObjectHideFlags: 0

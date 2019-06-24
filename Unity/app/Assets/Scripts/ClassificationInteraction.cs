@@ -5,7 +5,8 @@ public class ClassificationInteraction : MonoBehaviour
     public ClassificationStorage classificationStorage;
     public Score score;
     public GameObject interactiveArea;
-    public Draggable draggable;
+
+    private Draggable draggable;
 
     private void Start()
     {
@@ -14,7 +15,7 @@ public class ClassificationInteraction : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == interactiveArea)
+        if (other.gameObject.name == "InteractiveArea")
         {
             draggable.SetDraggable();
         }
@@ -22,7 +23,7 @@ public class ClassificationInteraction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == interactiveArea)
+        if (other.gameObject.name == "InteractiveArea")
         {
             SaveNoClassificationInteraction();
 
