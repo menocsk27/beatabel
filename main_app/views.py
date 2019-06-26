@@ -1,14 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
-from django.core.files.base import File
 from django.http import JsonResponse
 from .models import Song
 import json
 import os
 
 from . import ProcessImage
-from .ProcessSong import get_song_metadata, get_song_metadata_file
 
 def index(request):
     return render(request, "index.html")
