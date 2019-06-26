@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Timestamp Maker</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    </head>
+    <body>
+        <audio id="song" preload="metadata" %}">
+        </audio>
+        <section class="master-container">
+            <div class="box">
+                <div class="file has-name is-boxed is-centered">
+                    <label class="file-label" style="width: 100%">
+                        <input id="chooseSong" onchange="reflectFileName()" class="file-input" accept="audio/" type="file" name="uploadAudio">
+                        <div class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Choose Song…
+                            </span>
+                        </div>
+                        <span class="file-name" style="max-width: 100%; text-align: center;">
+                            No file chosen
+                        </span>
+                    </label>
+                </div>
+                <div class="buttons are-medium">
+                    <button id="tapButton" onclick="togglePlayAudio()" class="button is-primary">Start Tappin!</button>
+                    <button id="saveButton" onclick="saveTimestamps()" class="button button is-info">Save Timestamps</button>
+                </div>
+            </div>
+
+        </section>
+        <script>
+            var song = document.querySelector("#song");
+            var userSong = document.querySelector("#chooseSong");
+            var playing = false;
+            var fileNameEl = document.querySelector(".file-name");
+            var tapButton = document.querySelector("#tapButton");
+            var saveButton = document.querySelector("#saveButton");
+            var songName;
+            // Array to store timestamps
+            var timestamps = [];
+
+            userSong.onchange = function(){
+              var files = this.files;
+              songName = files[0].name;
+              songName = songName.substring(0, songName.indexOf("."));
+              song.src = URL.createObjectURL(files[0]);
+              fileNameEl.innerHTML = songName;
+              tapButton.innerHTML = "Start Tappin!"
+            };
+
+            function togglePlayAudio(){
+                if(playing === false){
+                    playing = true;       //song is playing
+                    song.play();
+                    tapButton.innerHTML = "Pause"
+                }
+                else{
+                    playing = false;     //song is paused
+                    song.pause();
+                    tapButton.innerHTML = "Resume"
+                }
+            }
+
+            function saveTimestamps(){
+                var formData = new FormData();
+                formData.append("createTimestamp", "true");
+                formData.append("songName", songName);
+                formData.append("songLength", song.duration);
+                formData.append("timestamps", timestamps);
+                if(timestamps.length > 0){
+                    fetch(".", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json());
+                }
+                else{
+                    alert("No timestamps");
+                }
+            }
+
+            // To listen for keypress only when song is playing i.e playing == true
+            window.onkeydown = function(event){
+                if(playing && event.key !== " "){
+                    timestamps.push(song.currentTime);
+                }
+            };
+
+            //Change playing to stop listening for keypress events
+            song.onended = () => {
+                playing = false;
+                tapButton.innerHTML = "Start Tappin!"
+            };
+        </script>
+    </body>
+
+    <style>
+        body{
+            margin: 0;
+        }
+        .file{
+            margin-bottom: 20px;
+        }
+        .master-container{
+            margin: 0;
+            font-family: Courier, serif;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .buttons{
+            display: flex;
+            justify-content: center;
+        }
+        .button{
+            font-family: Courier, serif;
+            font-weight: bold;
+        }
+    </style>
+</html>
