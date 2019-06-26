@@ -3,4 +3,5 @@ from django.conf import settings
 
 class Song(models.Model):
     name = models.CharField(max_length=256)
-    path = models.FileField(upload_to=settings.SONGS_PATH)
+    songLength = models.FloatField(default=0.0, null=False)
+    timestamps = models.TextField(null=False, default=None)

@@ -28,13 +28,33 @@ def createTimestamps(request):
         data = {"songs": songs}
         return render(request, "timeStampMaker.html", data)
     elif request.method == "POST":
-        if request.POST["songUpload"] == "true":
+        isSongUpload = False
+        isCreateTimestamp = False
+        try:
+            isSongUpload = request.POST["songUpload"]
+            isCreateTimestamp = request.POST["createTimestamp"]
+        except Exception as e:
+            if e.args[0] == "songUpload":
+                isSongUpload = "false"
+                isCreateTimestamp = request.POST["createTimestamp"]
+            if e.args[0] == "createTimestamp":
+                isCreateTimestamp = "false"
+                isSongUpload = request.POST["songUpload"]
+
+        if isSongUpload == "true":
             files = request.FILES.getlist("userSongs")
             for file in files:
-                song = Song(name=file.name, path=file)
-                song.save()
+                # song = Song(name=file.name, path=file)
+                # song.save()
                 # default_storage.save(songsFolderPath+file.name, file)
                 pass
+        elif isCreateTimestamp == "true":
+            songName = request.POST["songName"]
+            timestamps = request.POST["timestamps"]
+            songLength = request.POST["songLength"]
+            song = Song(name=songName, songLength=songLength, timestamps=timestamps)
+            song.save()
+            pass
         return JsonResponse({"Success": True}, status=200)
 
 @csrf_exempt
