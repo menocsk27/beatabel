@@ -7,6 +7,7 @@ import json
 import os
 
 from . import ProcessImage
+from . import ProcessSong
 
 def index(request):
     return render(request, "index.html")
@@ -64,9 +65,17 @@ def getSongs(request):
         jsonData = json.loads(data)
         for data in jsonData:
             data1.append(data["fields"])
+
         responseObj = {"Songs": data1}
+
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
+
+@csrf_exempt
+def testSong(request):
+    songUri, songDuration = ProcessSong.test("main_app/1.wav")
+    responseObj = {"URI": songUri, "songDuration": songDuration}
+    return JsonResponse(responseObj, status=200)
 
 @csrf_exempt
 def colorToGray(request):

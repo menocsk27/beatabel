@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@4(1ij3ynw36%-bq)$foztv0118y^nq+r)arf#h93rk8a+%l#l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "beatabelapi.herokuapp.com"]
 
@@ -98,9 +98,9 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
+if DEBUG == False:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=500)
 #
-# DATABASES['default'] = dj_database_url.config()
 
 # LOGGING = {
 #     'version': 1,
