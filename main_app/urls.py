@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^colorToGray/$', views.colorToGray),
     url(r'^createTimeStamps/$', views.createTimestamps),
     url(r'^getSongs/$', views.getSongs),
+    url(r'^testSong/$', views.testSong)
 ]
