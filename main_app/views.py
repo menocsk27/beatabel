@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core import serializers
 from .models import Song
 import json
 import os
@@ -53,6 +54,19 @@ def createTimestamps(request):
             song.save()
             pass
         return JsonResponse({"Success": True}, status=200)
+
+@csrf_exempt
+def getSongs(request):
+    if request.method == "GET":
+        songs = Song.objects.all()
+        data = serializers.serialize("json", songs, fields=("name", "songLength", "timestamps"))
+        data1 = []
+        jsonData = json.loads(data)
+        for data in jsonData:
+            data1.append(data["fields"])
+        responseObj = {"Songs": data1}
+        return JsonResponse(responseObj, status=200)
+    return HttpResponse(status=400)
 
 @csrf_exempt
 def colorToGray(request):

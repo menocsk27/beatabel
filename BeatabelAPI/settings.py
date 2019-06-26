@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@4(1ij3ynw36%-bq)$foztv0118y^nq+r)arf#h93rk8a+%l#l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "beatabelapi.herokuapp.com"]
 
@@ -79,7 +79,6 @@ WSGI_APPLICATION = 'BeatabelAPI.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 if 'RDS_HOSTNAME' in os.environ:
-    print("Exists")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -90,6 +89,8 @@ if 'RDS_HOSTNAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
 else:
     DATABASES = {
         'default': {
@@ -97,8 +98,7 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+
 #
 # DATABASES['default'] = dj_database_url.config()
 
