@@ -78,8 +78,14 @@ def createAutomatedTimestamps(request):
         file = request.FILES["song"]
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
+        if fs.exists(filename):
+            print("Exists")
+        else:
+            print("Nope")
         timestamps = ProcessSong.getTimestamps("media/"+filename)
-        os.remove("media/"+filename)
+        if fs.exists(filename):
+            fs.delete(filename)
+            pass
         responseObj = {"timestamps": str(timestamps)}
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
