@@ -73,8 +73,8 @@ def getSongs(request):
 
 @csrf_exempt
 def testSong(request):
-    songUri, songDuration = ProcessSong.test("main_app/1.mp3")
-    responseObj = {"URI": songUri, "songDuration": songDuration}
+    timestamps = ProcessSong.test1("D:/Music/Metallica - One.mp3")
+    responseObj = {"timestamps": str(timestamps)}
     return JsonResponse(responseObj, status=200)
 
 @csrf_exempt
