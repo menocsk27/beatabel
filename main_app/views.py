@@ -65,17 +65,20 @@ def getSongs(request):
         jsonData = json.loads(data)
         for data in jsonData:
             data1.append(data["fields"])
-
         responseObj = {"Songs": data1}
-
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
 
 @csrf_exempt
-def testSong(request):
-    timestamps = ProcessSong.test1("D:/Music/Metallica - One.mp3")
-    responseObj = {"timestamps": str(timestamps)}
-    return JsonResponse(responseObj, status=200)
+def createAutomatedTimestamps(request):
+    timestamps = []
+    if request.method == "POST":
+        file = request.FILES["song"]
+        tempPath = file.temporary_file_path()
+        timestamps = ProcessSong.getTimestamps(tempPath)
+        responseObj = {"timestamps": str(timestamps)}
+        return JsonResponse(responseObj, status=200)
+    return HttpResponse(status=400)
 
 @csrf_exempt
 def colorToGray(request):

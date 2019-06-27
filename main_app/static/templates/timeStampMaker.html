@@ -32,6 +32,7 @@
                 <div class="buttons are-medium">
                     <button id="tapButton" onclick="togglePlayAudio()" class="button is-primary">Start Tappin!</button>
                     <button id="saveButton" onclick="saveTimestamps()" class="button button is-info">Save Timestamps</button>
+{#                    <button id="saveButton" onclick="generateAutoTimestamps()" class="button button">Auto Timestamps</button>#}
                 </div>
             </div>
 
@@ -85,6 +86,18 @@
                 else{
                     alert("No timestamps");
                 }
+            }
+
+            function generateAutoTimestamps(){
+                var formData = new FormData();
+                formData.append("song", userSong.files[0]);
+                formData.append("createAutomatedTimestamps", "true");
+                fetch(".", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(response => console.log(response));
             }
 
             // To listen for keypress only when song is playing i.e playing == true

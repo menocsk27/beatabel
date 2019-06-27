@@ -2,7 +2,7 @@ import librosa
 import os
 import numpy as np
 
-def test1(source):
+def getTimestamps(source):
     input_file = source
     y, sr = librosa.load(input_file)
 

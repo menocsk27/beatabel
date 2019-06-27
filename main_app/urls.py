@@ -5,7 +5,7 @@ from django.urls import path
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^colorToGray/$', views.colorToGray),
-    url(r'^createTimeStamps/$', views.createTimestamps),
+    url(r'^createTimestamps/$', views.createTimestamps),
     url(r'^getSongs/$', views.getSongs),
-    url(r'^testSong/$', views.testSong)
+    url(r'^createAutomatedTimestamps/$', views.createAutomatedTimestamps)
 ]
