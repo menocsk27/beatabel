@@ -2,7 +2,9 @@ from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.files.storage import FileSystemStorage
 from .models import Song
+
 import json
 import os
 
@@ -74,8 +76,10 @@ def createAutomatedTimestamps(request):
     timestamps = []
     if request.method == "POST":
         file = request.FILES["song"]
-        tempPath = file.temporary_file_path()
-        timestamps = ProcessSong.getTimestamps(tempPath)
+        fs = FileSystemStorage()
+        filename = fs.save(file.name, file)
+        timestamps = ProcessSong.getTimestamps("media/"+filename)
+        os.remove("media/"+filename)
         responseObj = {"timestamps": str(timestamps)}
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
