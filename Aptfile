@@ -1,4 +1,6 @@
-ffmpeg
+#ffmpeg
+gstreamer1.0-plugins-base
+gstreamer1.0-plugins-ugly
 libav-tools
 #libsm6
 #libxrender1
