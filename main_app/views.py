@@ -8,7 +8,6 @@ from .models import Song
 import json
 import os
 
-from . import ProcessImage
 from . import ProcessSong
 
 def index(request):
@@ -76,17 +75,17 @@ def createAutomatedTimestamps(request):
     timestamps = []
     if request.method == "POST":
         file = request.FILES["song"]
+        mode = request.POST["mode"]
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
-        if fs.exists(filename):
-            print("Exists")
-        else:
-            print("Nope")
-        timestamps = ProcessSong.getTimestamps("media/"+filename)
+        timestamps = ProcessSong.getTimestamps("media/"+filename, mode)
         if fs.exists(filename):
             fs.delete(filename)
             pass
-        responseObj = {"timestamps": str(timestamps)}
+        if mode == "1":
+            responseObj = {"tempo": str(timestamps)}
+        else:
+                responseObj = {"timestamps": str(timestamps)}
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
 

@@ -14,6 +14,7 @@
         <section class="master-container">
             <div class="box">
                 <div class="file has-name is-boxed is-centered">
+                    <input name="mode" type="text"/>
                     <label class="file-label" style="width: 100%">
                         <input id="chooseSong" onchange="reflectFileName()" class="file-input" accept="audio/" type="file" name="uploadAudio">
                         <div class="file-cta">
@@ -40,6 +41,7 @@
         <script>
             var song = document.querySelector("#song");
             var userSong = document.querySelector("#chooseSong");
+            var mode = document.querySelector("#mode");
             var playing = false;
             var fileNameEl = document.querySelector(".file-name");
             var tapButton = document.querySelector("#tapButton");
@@ -92,6 +94,7 @@
                 var formData = new FormData();
                 formData.append("song", userSong.files[0]);
                 formData.append("createAutomatedTimestamps", "true");
+                formData.append("mode", mode);
                 fetch(".", {
                     method: "POST",
                     body: formData
