@@ -1,7 +1,7 @@
 ffmpeg
 libav-tools
-libsm6
-libxrender1
-libfontconfig1
-libice6
-libavcodec-extra
+#libsm6
+#libxrender1
+#libfontconfig1
+#libice6
+#libavcodec-extra
