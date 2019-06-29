@@ -15,6 +15,7 @@ Generates Timestamps and returns a JSON object with either tempo or timestamps d
 |-|-|-|-|
 | `song` | `file` | Audio from disk | Choose an audio file from your disk for processing |
 | `mode` | `text` | `0` or `1` | `0`: Get timestamps <br> `1`: Get tempo |
+| `save` | `text` | `0` or `1` | `0`: Do not save timestamps <br> `1`: Save timestamps <br>Saving is not possible for _tempo_ mode|
 
 ### `/getSongs/`
 Get the list of songs whose timestamps are stored in database

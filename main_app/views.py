@@ -6,8 +6,9 @@ from django.core.files.storage import FileSystemStorage
 from .models import Song
 
 import json
-import os
+import re
 
+import numpy as np
 from . import ProcessSong
 
 def index(request):
@@ -51,8 +52,10 @@ def createTimestamps(request):
         elif isCreateTimestamp == "true":
             songName = request.POST["songName"]
             timestamps = request.POST["timestamps"]
+            timestamps = timestamps.split(",")
+            timestamps = [float(t) for t in timestamps]
             songLength = request.POST["songLength"]
-            song = Song(name=songName, songLength=songLength, timestamps=timestamps)
+            song = Song(name=songName, songLength=songLength, timestamps=str(np.array(timestamps)))
             song.save()
             pass
         return JsonResponse({"Success": True}, status=200)
@@ -76,16 +79,23 @@ def createAutomatedTimestamps(request):
     if request.method == "POST":
         file = request.FILES["song"]
         mode = request.POST["mode"]
+        save = request.POST["save"]
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
-        timestamps = ProcessSong.getTimestamps("media/"+filename, mode)
+        timestamps, song_duration = ProcessSong.getTimestamps("media/"+filename, mode)
+
         if fs.exists(filename):
             fs.delete(filename)
             pass
         if mode == "1":
-            responseObj = {"tempo": str(timestamps)}
+            responseObj = {"tempo": str(timestamps), "SongDuration": song_duration}
         else:
-                responseObj = {"timestamps": str(timestamps)}
+            if save == "1":
+                tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
+                song = Song(name=file.name, songLength=song_duration,
+                            timestamps=tmpTimestamps)
+                song.save()
+            responseObj = {"timestamps": tmpTimestamps, "SongDuration": song_duration}
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
 

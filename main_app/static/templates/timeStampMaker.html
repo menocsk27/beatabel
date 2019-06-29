@@ -14,7 +14,8 @@
         <section class="master-container">
             <div class="box">
                 <div class="file has-name is-boxed is-centered">
-                    <input name="mode" type="text"/>
+                    <input name="mode" hidden type="text"/>
+                    <input name="save" hidden type="text"/>
                     <label class="file-label" style="width: 100%">
                         <input id="chooseSong" onchange="reflectFileName()" class="file-input" accept="audio/" type="file" name="uploadAudio">
                         <div class="file-cta">
@@ -36,8 +37,10 @@
 {#                    <button id="saveButton" onclick="generateAutoTimestamps()" class="button button">Auto Timestamps</button>#}
                 </div>
             </div>
-
+            <div class="box2" style="width: 90%; word-wrap: break-spaces">
+            </div>
         </section>
+
         <script>
             var song = document.querySelector("#song");
             var userSong = document.querySelector("#chooseSong");
@@ -47,6 +50,16 @@
             var tapButton = document.querySelector("#tapButton");
             var saveButton = document.querySelector("#saveButton");
             var songName;
+
+            var arr = "{{ songs.last.timestamps }}";
+            arr = arr.substring(1, arr.length-1);
+            arr = Object.values(arr.split(" "));
+            arr = arr.map(a => parseFloat(parseFloat(a).toFixed(1)));
+
+            {#var el = document.createElement("div");#}
+            {#arr.forEach(a => {el.appendChild(document.createTextNode(a+" "))});#}
+            {#document.querySelector(".box2").appendChild(el);#}
+
             // Array to store timestamps
             var timestamps = [];
 
@@ -58,7 +71,6 @@
               fileNameEl.innerHTML = songName;
               tapButton.innerHTML = "Start Tappin!"
             };
-
             function togglePlayAudio(){
                 if(playing === false){
                     playing = true;       //song is playing
@@ -90,18 +102,17 @@
                 }
             }
 
-            function generateAutoTimestamps(){
-                var formData = new FormData();
-                formData.append("song", userSong.files[0]);
-                formData.append("createAutomatedTimestamps", "true");
-                formData.append("mode", mode);
-                fetch(".", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(response => console.log(response));
-            }
+            {#function generateAutoTimestamps(){#}
+            {#    var formData = new FormData();#}
+            {#    formData.append("song", userSong.files[0]);#}
+            {#    formData.append("createAutomatedTimestamps", "true");#}
+            {#    formData.append("mode", mode);#}
+            {#    fetch(".", {#}
+            {#        method: "POST",#}
+            {#        body: formData#}
+            {#    })#}
+            {#    .then(response => response.json())#}
+            {#    .then(response => console.log(response));}#}
 
             // To listen for keypress only when song is playing i.e playing == true
             window.onkeydown = function(event){
@@ -115,6 +126,22 @@
                 playing = false;
                 tapButton.innerHTML = "Start Tappin!"
             };
+
+            /*var qq;
+            var i = 0;
+            song.onplay = () => {
+                qq = setInterval(function() {
+                    if(song.currentTime.toFixed(1) == arr[i]){
+                        i++;
+                        console.log(arr[i]);
+                    }
+                }, 100);
+            };
+
+            song.onpause = () => {
+                clearInterval(qq);
+            };*/
+
         </script>
     </body>
 
@@ -132,6 +159,7 @@
             height: 100vh;
             align-items: center;
             justify-content: space-evenly;
+            flex-direction: column;
         }
         .buttons{
             display: flex;
