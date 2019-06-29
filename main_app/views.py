@@ -90,8 +90,8 @@ def createAutomatedTimestamps(request):
         if mode == "1":
             responseObj = {"tempo": str(timestamps), "SongDuration": song_duration}
         else:
+            tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
             if save == "1":
-                tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
                 song = Song(name=file.name, songLength=song_duration,
                             timestamps=tmpTimestamps)
                 song.save()
