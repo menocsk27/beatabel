@@ -3,3 +3,6 @@ BeatabelAPI/__pycache__
 static/
 Unreal/beatabel/Saved/Crashes/
 Unreal/beatabel/Saved/Logs/
+Unreal/beatabel/Saved/Backup/
+Unreal/beatabel/Saved/Autosaves/
+Unreal/beatabel/Saved/Config/CrashReportClient/
