@@ -91,7 +91,12 @@ def createAutomatedTimestamps(request):
         file = request.FILES["song"]
         mode = request.POST["mode"]
         save = request.POST["save"]
-        getDelta = request.POST["getDelta"]
+        try:
+            getDelta = request.POST["getDelta"]
+        except Exception as e:
+            if e.args[0] == "getDelta":
+                getDelta = "0"
+
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
         timestamps, song_duration = ProcessSong.getTimestamps("media/"+filename, mode)
