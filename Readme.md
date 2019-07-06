@@ -29,5 +29,5 @@
 | `getDelta`(optional) | `text` | `0` or `1`| `0`: Do not do anything. Equivalent to removing this paramenter <br> `1`: Get time differences between each timestamp element in a timestamp array |
 
 ### `/createTimestamps/`
-**response type**: _JSON but not suitable for API calls_  `Please don't use for API calls`
+**response type**: _JSON but not suitable for API calls_  `Please don't use for API calls`<br>
 **Desription**: Does not return any query results. Not API method but a webpage URL for manual timestamp creation. <br>Choose a song and click "Start tapping". Then press any key to save that timestamp. When done, pause the song and click "Save Timestamps" to save timestamps.

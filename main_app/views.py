@@ -75,7 +75,9 @@ def getSongs(request):
                 data["fields"]["timestamps"] = data["fields"]["timestamps"][1:-1]
                 timestamps = data["fields"]["timestamps"]
                 timestamps = [float(i) for i in timestamps.split()]
+                tmp = timestamps[0]
                 timestamps = np.diff(timestamps)
+                timestamps[0] = tmp
                 data["fields"]["timestamps"] = str(timestamps)
 
             data1.append(data["fields"])
@@ -113,7 +115,9 @@ def createAutomatedTimestamps(request):
                             timestamps=timestamps)
                 song.save()
             if getDelta == "1":
+                tmp = timestamps[0]
                 timestamps = np.diff(timestamps)
+                timestamps[0] = tmp
             responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
 
         return JsonResponse(responseObj, status=200)
