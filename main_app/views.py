@@ -55,7 +55,7 @@ def createTimestamps(request):
             timestamps = timestamps.split(",")
             timestamps = [float(t) for t in timestamps]
             songLength = request.POST["songLength"]
-            song = Song(name=songName, songLength=songLength, timestamps=str(np.array(timestamps)))
+            song = Song(name=songName, songLength=songLength, timestamps=np.array(timestamps))
             song.save()
             pass
         return JsonResponse({"Success": True}, status=200)
@@ -63,12 +63,23 @@ def createTimestamps(request):
 @csrf_exempt
 def getSongs(request):
     if request.method == "GET":
+        getDelta = "0"
+        if "getDelta" in request.headers:
+            getDelta = request.headers["getDelta"]
         songs = Song.objects.all()
         data = serializers.serialize("json", songs, fields=("name", "songLength", "timestamps"))
         data1 = []
         jsonData = json.loads(data)
         for data in jsonData:
+            if getDelta == "1":
+                data["fields"]["timestamps"] = data["fields"]["timestamps"][1:-1]
+                timestamps = data["fields"]["timestamps"]
+                timestamps = [float(i) for i in timestamps.split()]
+                timestamps = np.diff(timestamps)
+                data["fields"]["timestamps"] = str(timestamps)
+
             data1.append(data["fields"])
+
         responseObj = {"Songs": data1}
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
@@ -80,6 +91,7 @@ def createAutomatedTimestamps(request):
         file = request.FILES["song"]
         mode = request.POST["mode"]
         save = request.POST["save"]
+        getDelta = request.POST["getDelta"]
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
         timestamps, song_duration = ProcessSong.getTimestamps("media/"+filename, mode)
@@ -88,14 +100,17 @@ def createAutomatedTimestamps(request):
             fs.delete(filename)
             pass
         if mode == "1":
-            responseObj = {"tempo": str(timestamps), "SongDuration": song_duration}
+            responseObj = {"tempo": timestamps, "SongDuration": song_duration}
         else:
-            tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
+            # tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
             if save == "1":
                 song = Song(name=file.name, songLength=song_duration,
-                            timestamps=tmpTimestamps)
+                            timestamps=timestamps)
                 song.save()
-            responseObj = {"timestamps": tmpTimestamps, "SongDuration": song_duration}
+            if getDelta == "1":
+                timestamps = np.diff(timestamps)
+            responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
+
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
 

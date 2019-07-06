@@ -51,10 +51,10 @@
             var saveButton = document.querySelector("#saveButton");
             var songName;
 
-            var arr = "{{ songs.last.timestamps }}";
-            arr = arr.substring(1, arr.length-1);
-            arr = Object.values(arr.split(" "));
-            arr = arr.map(a => parseFloat(parseFloat(a).toFixed(1)));
+            {#var arr = "{{ songs.last.timestamps }}";#}
+            {#arr = arr.substring(1, arr.length-1);#}
+            {#arr = Object.values(arr.split(" "));#}
+            {#arr = arr.map(a => parseFloat(parseFloat(a).toFixed(1)));#}
 
             {#var el = document.createElement("div");#}
             {#arr.forEach(a => {el.appendChild(document.createTextNode(a+" "))});#}

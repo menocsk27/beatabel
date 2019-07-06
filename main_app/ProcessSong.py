@@ -1,4 +1,5 @@
 import librosa
+import numpy as np
 
 def getTimestamps(source, mode):
     input_file = source
@@ -10,7 +11,6 @@ def getTimestamps(source, mode):
     # 4. Convert the frame indices of beat events into timestamps
     beat_times = librosa.frames_to_time(beat_frames, sr=sr)
     song_duration = librosa.get_duration(y=y, sr=sr)
-
     if mode == "1":
         return tempo, song_duration
     else:
