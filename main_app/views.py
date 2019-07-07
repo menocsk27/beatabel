@@ -77,7 +77,7 @@ def getSongs(request):
                 timestamps = [float(i) for i in timestamps.split()]
                 tmp = timestamps[0]
                 timestamps = np.diff(timestamps)
-                timestamps[0] = tmp
+                timestamps = np.append(tmp, timestamps)
                 data["fields"]["timestamps"] = str(timestamps)
 
             data1.append(data["fields"])
