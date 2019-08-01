@@ -1,8 +1,7 @@
 // No copyright
 
-
 #include "MapArrayPopulator.h"
-
+using namespace std;
 // Sets default values
 AMapArrayPopulator::AMapArrayPopulator()
 {
@@ -25,3 +24,9 @@ void AMapArrayPopulator::Tick(float DeltaTime)
 
 }
 
+void AMapArrayPopulator::FindFiles(const FString& Directory, const FString& FileExtension, TArray<FString>& FoundFiles)
+{
+	IFileManager& FileManager = IFileManager::Get();
+	FileManager.FindFiles(FoundFiles, *Directory, *FileExtension);
+	IImageWrapperModule& ImageWrapperModule = FModuleManager::Load
+}

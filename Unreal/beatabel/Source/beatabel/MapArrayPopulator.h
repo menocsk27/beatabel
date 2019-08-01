@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Runtime/ImageWrapper/Public/IImageWrapper.h"
+#include "Runtime/ImageWrapper/Public/IImageWrapperModule.h"
+#include "Runtime/Core/Public/HAL/FileManagerGeneric.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MapArrayPopulator.generated.h"
@@ -16,6 +19,8 @@ public:
 	AMapArrayPopulator();
 
 protected:
+	UFUNCTION(BlueprintCallable)
+		static void FindFiles(const FString& Directory, const FString& FileExtension, TArray<FString>& FoundFiles);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
