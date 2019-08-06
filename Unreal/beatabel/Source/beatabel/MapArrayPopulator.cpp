@@ -28,5 +28,5 @@ void AMapArrayPopulator::FindFiles(const FString& Directory, const FString& File
 {
 	IFileManager& FileManager = IFileManager::Get();
 	FileManager.FindFiles(FoundFiles, *Directory, *FileExtension);
-	IImageWrapperModule& ImageWrapperModule = FModuleManager::Load
+	//IImageWrapperModule& ImageWrapperModule = FModuleManager::Load
 }
