@@ -159,14 +159,14 @@ def JSONCreateAutomatedTimestamps(request):
                 print(str(e))
             timestamps, song_duration = ProcessSong.getTimestamps(filename, mode)
 
-            if returnOgg == "1":
-                try:
-                    with open(filename, "rb") as f1:
-                        oggFile = ProcessSong.convertToOgg(f1)
-                        f1.close()
-                except Exception as e:
-                    print(str(e))
-
+            # if returnOgg == "1":
+            #     try:
+            #         with open(filename, "rb") as f1:
+            #             oggFile = ProcessSong.convertToOgg(f1)
+            #             f1.close()
+            #     except Exception as e:
+            #         print(str(e))
+            # f.close()
             os.remove(filename)
 
             if mode == "1":
@@ -182,9 +182,9 @@ def JSONCreateAutomatedTimestamps(request):
                     timestamps = np.diff(timestamps)
                     timestamps[0] = tmp
                 responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
-                if returnOgg == "1":
-                    responseObj["oggB64"] = oggFile
-                    pass
+                # if returnOgg == "1":
+                #     responseObj["oggB64"] = oggFile
+                #     pass
 
             return JsonResponse(responseObj, status=200)
         return HttpResponse(status=400)
