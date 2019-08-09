@@ -1,5 +1,9 @@
+# import base64
+# import os
 import librosa
-import numpy as np
+# from pydub import AudioSegment
+
+
 
 def getTimestamps(source, mode):
     input_file = source
@@ -15,3 +19,17 @@ def getTimestamps(source, mode):
         return tempo, song_duration
     else:
         return beat_times, song_duration
+
+def convertToOgg(source):
+    # oggFile = source.split(".")[0]+".ogg"
+    # oggB64 = ""
+    # AudioSegment.from_mp3(source).export(oggFile, format="ogg")
+    # try:
+    #     with open(source, "rb") as f1:
+    #         oggB64 = str(base64.b64encode(f1.read()))
+    #         f1.close()
+    #         os.remove(oggFile)
+    # except Exception as e:
+    #     print(str(e))
+    # return oggB64
+    pass
