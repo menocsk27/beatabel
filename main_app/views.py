@@ -6,10 +6,12 @@ from django.core.files.storage import FileSystemStorage
 from .models import Song
 
 import json
-import re
+import base64
+import os
 
 import numpy as np
 from . import ProcessSong
+
 
 def index(request):
     return render(request, "index.html")
@@ -122,6 +124,71 @@ def createAutomatedTimestamps(request):
 
         return JsonResponse(responseObj, status=200)
     return HttpResponse(status=400)
+
+@csrf_exempt
+def JSONCreateAutomatedTimestamps(request):
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        timestamps = []
+        if request.method == "POST":
+            file = base64.b64decode(json_data["song"]+ "==")
+            mode = json_data["mode"]
+            save = json_data["save"]
+            songName = json_data["songName"]
+
+            try:
+                getDelta = json_data["getDelta"]
+            except Exception as e:
+                if e.args[0] == "getDelta":
+                    getDelta = "0"
+
+            try:
+                returnOgg = json_data["returnOgg"]
+            except Exception as e:
+                if e.args[0] == "returnOgg":
+                    returnOgg = "0"
+
+
+            filename = "media/"+songName
+            # filename = filename.split(".")[0]+".ogg"
+            try:
+                with open(filename, "wb+") as f:
+                    f.write(file)
+                    f.close()
+            except Exception as e:
+                print(str(e))
+            timestamps, song_duration = ProcessSong.getTimestamps(filename, mode)
+
+            if returnOgg == "1":
+                try:
+                    with open(filename, "rb") as f1:
+                        oggFile = ProcessSong.convertToOgg(f1)
+                        f1.close()
+                except Exception as e:
+                    print(str(e))
+
+            os.remove(filename)
+
+            if mode == "1":
+                responseObj = {"tempo": timestamps, "SongDuration": song_duration}
+            else:
+                # tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
+                if save == "1":
+                    song = Song(name=songName, songLength=song_duration,
+                                timestamps=timestamps)
+                    song.save()
+                if getDelta == "1":
+                    tmp = timestamps[0]
+                    timestamps = np.diff(timestamps)
+                    timestamps[0] = tmp
+                responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
+                if returnOgg == "1":
+                    responseObj["oggB64"] = oggFile
+                    pass
+
+            return JsonResponse(responseObj, status=200)
+        return HttpResponse(status=400)
+
 
 # @csrf_exempt
 # def colorToGray(request):
