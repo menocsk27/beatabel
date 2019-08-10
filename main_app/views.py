@@ -131,7 +131,7 @@ def JSONCreateAutomatedTimestamps(request):
         json_data = json.loads(request.body)
         timestamps = []
         if request.method == "POST":
-            file = base64.b64decode(json_data["song"]+ "==")
+            file = base64.b64decode(json_data["song"] + "==")
             mode = json_data["mode"]
             save = json_data["save"]
             songName = json_data["songName"]
@@ -158,6 +158,7 @@ def JSONCreateAutomatedTimestamps(request):
             except Exception as e:
                 print(str(e))
             timestamps, song_duration = ProcessSong.getTimestamps(filename, mode)
+            os.remove(filename)
 
             # if returnOgg == "1":
             #     try:
@@ -167,7 +168,6 @@ def JSONCreateAutomatedTimestamps(request):
             #     except Exception as e:
             #         print(str(e))
             # f.close()
-            # os.remove(filename)
 
             if mode == "1":
                 responseObj = {"tempo": timestamps, "SongDuration": song_duration}
