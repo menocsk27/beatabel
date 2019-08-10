@@ -167,7 +167,7 @@ def JSONCreateAutomatedTimestamps(request):
             #     except Exception as e:
             #         print(str(e))
             # f.close()
-            os.remove(filename)
+            # os.remove(filename)
 
             if mode == "1":
                 responseObj = {"tempo": timestamps, "SongDuration": song_duration}
