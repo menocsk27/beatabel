@@ -149,7 +149,8 @@ def JSONCreateAutomatedTimestamps(request):
                     returnOgg = "0"
 
 
-            filename = "media/"+songName
+            # filename = "media/"+songName
+            filename = songName
             # filename = filename.split(".")[0]+".ogg"
             try:
                 with open(filename, "wb+") as f:
