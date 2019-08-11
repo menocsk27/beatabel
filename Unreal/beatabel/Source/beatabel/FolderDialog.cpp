@@ -42,3 +42,30 @@ void AFolderDialog::OpenDirectoryDialog(const FString& DialogTitle, const FStrin
 	}
 }
 
+void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere)
+{
+	if (FullPath.Equals(TEXT("#")))
+	{
+		FString f;
+		int asc = 65;
+		FString a = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		FString p;
+		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+		for (int i = 0; i < a.Len(); i++)
+		{
+			p = a.Mid(i, 1).Append(TEXT(":"));
+			if (PlatformFile.DirectoryExists(*p))
+			{
+				ChildrenFolders.Add(*p);
+			}
+		}
+		
+	}
+	else
+	{
+		IFileManager& FileManager = IFileManager::Get();
+		FString FinalPath = FullPath / TEXT("*");
+		PathTillHere = FullPath;
+		FileManager.FindFiles(ChildrenFolders, *FinalPath, false, true);
+	}	
+}

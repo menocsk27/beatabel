@@ -44,3 +44,17 @@ void AFileDialog::OpenFileDialog(const FString& DialogTitle, const FString& Defa
 	}
 }
 
+void AFileDialog::LoadFileToArray(const FString& FilePath, TArray<uint8>& rawFile)
+{
+	//* If true the song was successfully loaded
+	bool loaded = false;
+	//* rawFile is loaded song file (binary, encoded)
+	FFileHelper::LoadFileToArray(rawFile, *FilePath);
+	
+}
+
+void AFileDialog::SaveArrayToFile(const TArray<uint8>& rawFile, const FString& FilePath)
+{
+	FFileHelper::SaveArrayToFile(rawFile, *FilePath);
+}
+

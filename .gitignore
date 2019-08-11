@@ -10,3 +10,5 @@ Unreal/beatabel/Saved/Config/Windows/EditorPerProjectUserSettings.ini
 Unreal/beatabel/.vs/
 Unreal/beatabel/Binaries/
 Unreal/beatabel/Intermediate/
+Unreal/beatabel/Content/Beatabel/Audio/*.mp3
+Unreal/beatabel/Content/Beatabel/Audio/*.wav

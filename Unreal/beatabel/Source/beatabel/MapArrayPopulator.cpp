@@ -24,9 +24,9 @@ void AMapArrayPopulator::Tick(float DeltaTime)
 
 }
 
+// Find all files of an .ext under a directory
 void AMapArrayPopulator::FindFiles(const FString& Directory, const FString& FileExtension, TArray<FString>& FoundFiles)
 {
 	IFileManager& FileManager = IFileManager::Get();
 	FileManager.FindFiles(FoundFiles, *Directory, *FileExtension);
-	//IImageWrapperModule& ImageWrapperModule = FModuleManager::Load
 }
