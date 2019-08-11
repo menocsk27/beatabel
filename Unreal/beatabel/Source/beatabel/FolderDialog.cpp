@@ -44,6 +44,7 @@ void AFolderDialog::OpenDirectoryDialog(const FString& DialogTitle, const FStrin
 
 void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere)
 {
+	// When at root, check what drive letters exist
 	if (FullPath.Equals(TEXT("#")))
 	{
 		FString f;
@@ -61,6 +62,8 @@ void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FS
 		}
 		
 	}
+
+	// Otherwise do normal children exist check
 	else
 	{
 		IFileManager& FileManager = IFileManager::Get();
