@@ -42,66 +42,33 @@ void AFolderDialog::OpenDirectoryDialog(const FString& DialogTitle, const FStrin
 	}
 }
 
-void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere, const bool& FolderOrFiles)
-{	
-	if (!FolderOrFiles) 
+void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere)
+{
+	// When at root, check what drive letters exist
+	if (FullPath.Equals(TEXT("#")))
 	{
-		// When at root, check what drive letters exist
-		if (FullPath.Equals(TEXT("#")))
+		FString f;
+		int asc = 65;
+		FString a = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		FString p;
+		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+		for (int i = 0; i < a.Len(); i++)
 		{
-			FString f;
-			int asc = 65;
-			FString a = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-			FString p;
-			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-			for (int i = 0; i < a.Len(); i++)
+			p = a.Mid(i, 1).Append(TEXT(":"));
+			if (PlatformFile.DirectoryExists(*p))
 			{
-				p = a.Mid(i, 1).Append(TEXT(":"));
-				if (PlatformFile.DirectoryExists(*p))
-				{
-					ChildrenFolders.Add(*p);
-				}
+				ChildrenFolders.Add(*p);
 			}
-
 		}
 
-		// Otherwise do normal children exist check
-		else
-		{
-			IFileManager& FileManager = IFileManager::Get();
-			FString FinalPath = FullPath / TEXT("*");
-			PathTillHere = FullPath;
-			FileManager.FindFiles(ChildrenFolders, *FinalPath, false, true);
-		}
 	}
-	else 
+
+	// Otherwise do normal children exist check
+	else
 	{
-		if (FullPath.Equals(TEXT("#")))
-		{
-			FString f;
-			int asc = 65;
-			FString a = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-			FString p;
-			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-			for (int i = 0; i < a.Len(); i++)
-			{
-				p = a.Mid(i, 1).Append(TEXT(":"));
-				if (PlatformFile.DirectoryExists(*p))
-				{
-					ChildrenFolders.Add(*p);
-				}
-			}
-
-		}
-
-		// Otherwise do normal children exist check
-		else
-		{
-			IFileManager& FileManager = IFileManager::Get();
-			FString FinalPath = FullPath / TEXT("*.ogg");
-			PathTillHere = FullPath;
-			FileManager.FindFiles(ChildrenFolders, *FinalPath, false, true);
-		}
+		IFileManager& FileManager = IFileManager::Get();
+		FString FinalPath = FullPath / TEXT("*");
+		PathTillHere = FullPath;
+		FileManager.FindFiles(ChildrenFolders, *FinalPath, false, true);
 	}
-	
 }
