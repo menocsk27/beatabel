@@ -26,7 +26,7 @@ protected:
 		static void OpenDirectoryDialog(const FString& DialogTitle, const FString& DefaultPath, FString& OutFolderName);
 	
 	UFUNCTION(BlueprintCallable, Category = "FilePicker")
-		static void OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere);
+		static void OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere, const bool& FolderOrFiles);
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
