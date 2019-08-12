@@ -58,3 +58,8 @@ void AFileDialog::SaveArrayToFile(const TArray<uint8>& rawFile, const FString& F
 	FFileHelper::SaveArrayToFile(rawFile, *FilePath);
 }
 
+void AFileDialog::DeleteFile(const FString& FilePath)
+{
+	FPlatformFileManager::Get().GetPlatformFile().DeleteFile(*FilePath);
+}
+
