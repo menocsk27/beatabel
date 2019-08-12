@@ -23,6 +23,32 @@ def index(request):
 ##     pass
 
 @csrf_exempt
+def getSongs(request):
+    if request.method == "GET":
+        getDelta = "0"
+        if "getDelta" in request.headers:
+            getDelta = request.headers["getDelta"]
+        songs = Song.objects.all()
+        data = serializers.serialize("json", songs, fields=("name", "songLength", "timestamps"))
+        data1 = []
+        jsonData = json.loads(data)
+        for data in jsonData:
+            if getDelta == "1":
+                data["fields"]["timestamps"] = data["fields"]["timestamps"][1:-1]
+                timestamps = data["fields"]["timestamps"]
+                timestamps = [float(i) for i in timestamps.split()]
+                tmp = timestamps[0]
+                timestamps = np.diff(timestamps)
+                timestamps = np.append(tmp, timestamps)
+                data["fields"]["timestamps"] = str(timestamps)
+
+            data1.append(data["fields"])
+
+        responseObj = {"Songs": data1}
+        return JsonResponse(responseObj, status=200)
+    return HttpResponse(status=400)
+
+@csrf_exempt
 def createTimestamps(request):
     songsFolderPath = "songs/"
     # songList =
@@ -61,32 +87,6 @@ def createTimestamps(request):
             song.save()
             pass
         return JsonResponse({"Success": True}, status=200)
-
-@csrf_exempt
-def getSongs(request):
-    if request.method == "GET":
-        getDelta = "0"
-        if "getDelta" in request.headers:
-            getDelta = request.headers["getDelta"]
-        songs = Song.objects.all()
-        data = serializers.serialize("json", songs, fields=("name", "songLength", "timestamps"))
-        data1 = []
-        jsonData = json.loads(data)
-        for data in jsonData:
-            if getDelta == "1":
-                data["fields"]["timestamps"] = data["fields"]["timestamps"][1:-1]
-                timestamps = data["fields"]["timestamps"]
-                timestamps = [float(i) for i in timestamps.split()]
-                tmp = timestamps[0]
-                timestamps = np.diff(timestamps)
-                timestamps = np.append(tmp, timestamps)
-                data["fields"]["timestamps"] = str(timestamps)
-
-            data1.append(data["fields"])
-
-        responseObj = {"Songs": data1}
-        return JsonResponse(responseObj, status=200)
-    return HttpResponse(status=400)
 
 @csrf_exempt
 def createAutomatedTimestamps(request):
@@ -130,65 +130,91 @@ def JSONCreateAutomatedTimestamps(request):
     if request.method == "POST":
         json_data = json.loads(request.body)
         timestamps = []
-        if request.method == "POST":
-            file = base64.b64decode(json_data["song"] + "==")
-            mode = json_data["mode"]
-            save = json_data["save"]
-            songName = json_data["songName"]
+        file = base64.b64decode(json_data["song"] + "==")
+        mode = json_data["mode"]
+        save = json_data["save"]
+        songName = json_data["songName"]
 
+        try:
+            getDelta = json_data["getDelta"]
+        except Exception as e:
+            if e.args[0] == "getDelta":
+                getDelta = "0"
+
+        try:
+            returnOgg = json_data["returnOgg"]
+        except Exception as e:
+            if e.args[0] == "returnOgg":
+                returnOgg = "0"
+
+
+        # filename = "media/"+songName
+        filename = songName
+        # filename = filename.split(".")[0]+".ogg"
+        try:
+            with open(filename, "wb+") as f:
+                f.write(file)
+                f.close()
+        except Exception as e:
+            print(str(e))
+        timestamps, song_duration = ProcessSong.getTimestamps(filename, mode)
+
+        if returnOgg == "1":
             try:
-                getDelta = json_data["getDelta"]
-            except Exception as e:
-                if e.args[0] == "getDelta":
-                    getDelta = "0"
-
-            try:
-                returnOgg = json_data["returnOgg"]
-            except Exception as e:
-                if e.args[0] == "returnOgg":
-                    returnOgg = "0"
-
-
-            # filename = "media/"+songName
-            filename = songName
-            # filename = filename.split(".")[0]+".ogg"
-            try:
-                with open(filename, "wb+") as f:
-                    f.write(file)
-                    f.close()
+                with open(filename, "rb") as f1:
+                    oggFile = ProcessSong.convertToOgg(f1.name)
+                    f1.close()
             except Exception as e:
                 print(str(e))
-            timestamps, song_duration = ProcessSong.getTimestamps(filename, mode)
-            os.remove(filename)
+        f.close()
 
-            # if returnOgg == "1":
-            #     try:
-            #         with open(filename, "rb") as f1:
-            #             oggFile = ProcessSong.convertToOgg(f1)
-            #             f1.close()
-            #     except Exception as e:
-            #         print(str(e))
-            # f.close()
 
-            if mode == "1":
-                responseObj = {"tempo": timestamps, "SongDuration": song_duration}
-            else:
-                # tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
-                if save == "1":
-                    song = Song(name=songName, songLength=song_duration,
-                                timestamps=timestamps)
-                    song.save()
-                if getDelta == "1":
-                    tmp = timestamps[0]
-                    timestamps = np.diff(timestamps)
-                    timestamps[0] = tmp
-                responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
-                # if returnOgg == "1":
-                #     responseObj["oggB64"] = oggFile
-                #     pass
+        if mode == "1":
+            responseObj = {"tempo": timestamps, "SongDuration": song_duration}
+        else:
+            # tmpTimestamps = re.sub(r'\s+', ' ', "["+str(timestamps)[1:].strip().replace("\n", "")).strip()
+            if save == "1":
+                song = Song(name=songName, songLength=song_duration,
+                            timestamps=timestamps)
+                song.save()
+            if getDelta == "1":
+                tmp = timestamps[0]
+                timestamps = np.diff(timestamps)
+                timestamps[0] = tmp
+            responseObj = {"timestamps": str(timestamps), "SongDuration": song_duration}
+            if returnOgg == "1":
+                responseObj["oggB64"] = oggFile
+                pass
 
-            return JsonResponse(responseObj, status=200)
+        os.remove(filename)
+        return JsonResponse(responseObj, status=200)
+    else:
         return HttpResponse(status=400)
+
+@csrf_exempt
+def convertToOGG(request):
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        file = base64.b64decode(json_data["song"] + "==")
+        songName = json_data["songName"]
+        filename = songName
+        try:
+            with open(filename, "wb+") as f:
+                f.write(file)
+                f.close()
+        except Exception as e:
+            print(str(e))
+
+        try:
+            with open(filename, "rb") as f:
+                oggFile = ProcessSong.convertToOgg(f.name)
+                f.close()
+        except Exception as e:
+            print(str(e))
+
+        responseObj = {"oggB64": oggFile}
+        return JsonResponse(responseObj, status=200)
+    return HttpResponse(status=400)
 
 
 # @csrf_exempt

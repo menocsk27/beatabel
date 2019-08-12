@@ -6,3 +6,4 @@ main_app/ProcessImage.py
 db.sqlite3
 venv/
 __pycache__/
+venv1/

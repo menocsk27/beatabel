@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -8,5 +7,6 @@ urlpatterns = [
     url(r'^createTimestamps/$', views.createTimestamps),
     url(r'^getSongs/$', views.getSongs),
     url(r'^createAutomatedTimestamps/$', views.createAutomatedTimestamps),
-    url(r'^JSONCreateAutomatedTimestamps/$', views.JSONCreateAutomatedTimestamps)
+    url(r'^JSONCreateAutomatedTimestamps/$', views.JSONCreateAutomatedTimestamps),
+    url(r'^convertToOgg/$', views.convertToOGG)
 ]
