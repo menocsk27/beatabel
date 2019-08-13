@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+//#include "DesktopPlatform/Public/IDesktopPlatform.h"
+//#include "DesktopPlatform/Public/DesktopPlatformModule.h"
 #include "Runtime/Core/Public/Misc/FileHelper.h"
 #include "Runtime/Core/Public/HAL/PlatformFilemanager.h"
 
@@ -23,8 +23,8 @@ public:
 	
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "FileHandling")
-		static void OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& DefaultFile, const FString& FileTypes, TArray<FString>& OutFileNames);
+	/*UFUNCTION(BlueprintCallable, Category = "FileHandling")
+		static void OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& DefaultFile, const FString& FileTypes, TArray<FString>& OutFileNames);*/
 	
 	UFUNCTION(BlueprintCallable, Category = "FileHandling")
 		static void LoadFileToArray(const FString& FilePath, TArray<uint8>& rawFile);
