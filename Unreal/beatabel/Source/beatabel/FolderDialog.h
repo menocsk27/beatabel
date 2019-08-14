@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+//#include "DesktopPlatform/Public/IDesktopPlatform.h"
+//#include "DesktopPlatform/Public/DesktopPlatformModule.h"
 #include "Runtime/Core/Public/HAL/PlatformFilemanager.h"
 #include "Runtime/Core/Public/HAL/FileManager.h"
 
@@ -22,8 +22,8 @@ public:
 	AFolderDialog();
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "FilePicker")
-		static void OpenDirectoryDialog(const FString& DialogTitle, const FString& DefaultPath, FString& OutFolderName);
+	/*UFUNCTION(BlueprintCallable, Category = "FilePicker")
+		static void OpenDirectoryDialog(const FString& DialogTitle, const FString& DefaultPath, FString& OutFolderName);*/
 	
 	UFUNCTION(BlueprintCallable, Category = "FilePicker")
 		static void OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere);

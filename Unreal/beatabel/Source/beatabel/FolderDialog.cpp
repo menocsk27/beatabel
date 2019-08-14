@@ -24,23 +24,23 @@ void AFolderDialog::Tick(float DeltaTime)
 
 }
 
-void AFolderDialog::OpenDirectoryDialog(const FString& DialogTitle, const FString& DefaultPath, FString& OutFolderName)
-{
-	if (GEngine)
-	{
-		if (GEngine->GameViewport)
-		{
-			// Set parent window as the viewport
-			void* ParentWindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
-			IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
-			if (DesktopPlatform)
-			{
-				//Opening the folder picker
-				DesktopPlatform->OpenDirectoryDialog(ParentWindowHandle, DialogTitle, DefaultPath, OutFolderName);
-			}
-		}
-	}
-}
+//void AFolderDialog::OpenDirectoryDialog(const FString& DialogTitle, const FString& DefaultPath, FString& OutFolderName)
+//{
+//	if (GEngine)
+//	{
+//		if (GEngine->GameViewport)
+//		{
+//			// Set parent window as the viewport
+//			void* ParentWindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
+//			IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
+//			if (DesktopPlatform)
+//			{
+//				//Opening the folder picker
+//				DesktopPlatform->OpenDirectoryDialog(ParentWindowHandle, DialogTitle, DefaultPath, OutFolderName);
+//			}
+//		}
+//	}
+//}
 
 void AFolderDialog::OpenCustomDirectoryDialog(const FString& FullPath, TArray<FString>& ChildrenFolders, FString& PathTillHere)
 {
