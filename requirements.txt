@@ -1,6 +1,6 @@
 Django==3.2.25
 djangorestframework==3.11.2
-gunicorn==19.9.0
+gunicorn==22.0.0
 numpy==1.22.0
 opencv-python==4.8.1.78
 pytz==2019.1
